@@ -1,0 +1,8 @@
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader><space>', function() builtin.buffers({sort_lastused = true}) end, { desc = '[T] Find existing buffers' })
+vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[T] Search Files' })
+vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[T] Search by Grep' })
+vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[T] Search current word' })
+vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[T] Search keymaps' })
+-- vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[T] Search diagnostics' })
+vim.keymap.set('n', '<leader>gf', builtin.git_files, { desc = '[T] Search Git Files' })
