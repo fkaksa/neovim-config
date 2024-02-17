@@ -11,7 +11,7 @@ vim.o.showmatch = true
 vim.o.ignorecase = true
 
 -- middle-click paste with
-vim.o.mouse=v
+vim.o.mouse = 'v'
 
 -- Save undo history
 vim.o.undofile = true
