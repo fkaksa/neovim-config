@@ -15,28 +15,28 @@ lsp_zero.on_attach(function(client, bufnr)
   keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
   keymap.set({ 'n' }, '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
 
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
+  -- -- Create a command `:Format` local to the LSP buffer
+  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+  --   vim.lsp.buf.format()
+  -- end, { desc = 'Format current buffer with LSP' })
 end)
 
 -- Format code
-vim.keymap.set(
-  'n', '<leader>f',
-  function()
-    if vim.bo.filetype == 'markdown' then
-      vim.bo.textwidth = 160
-      vim.o.colorcolumn = '160'
-      vim.api.nvim_command(':w')
-      vim.api.nvim_command(':silent !deno fmt %')
-      print('Deno format complete')
-    else
-      vim.api.nvim_command(':Format')
-    end
-  end,
-  { desc = '[B] Format buffer with external tool of language server' }
-)
+-- vim.keymap.set(
+--   'n', '<leader>f',
+--   function()
+--     if vim.bo.filetype == 'markdown' then
+--       vim.bo.textwidth = 160
+--       vim.o.colorcolumn = '160'
+--       vim.api.nvim_command(':w')
+--       vim.api.nvim_command(':silent !deno fmt %')
+--       print('Deno format complete')
+--     else
+--       vim.api.nvim_command(':Format')
+--     end
+--   end,
+--   { desc = '[B] Format buffer with external tool of language server' }
+-- )
 
 -- too see if the lsp is working properly you can use the following command
 -- :lua require('lsp-zero.check').inspect_settings('<server>')
@@ -62,6 +62,30 @@ local handlers = {
       }
     }
   end,
+  ['helm_ls'] = function()
+    require('lspconfig').helm_ls.setup({
+      logLevel = "info",
+      valuesFiles = {
+        mainValuesFile = "values.yaml",
+        lintOverlayValuesFile = "values.lint.yaml",
+        additionalValuesFilesGlobPattern = "values*.yaml"
+      },
+      yamlls = {
+        enabled = true,
+        diagnosticsLimit = 50,
+        showDiagnosticsDirectly = false,
+        path = "yaml-language-server",
+        config = {
+          schemas = {
+            kubernetes = "templates/**",
+          },
+          completion = true,
+          hover = true,
+          -- any other config from https://github.com/redhat-developer/yaml-language-server#language-server-settings
+        }
+      }
+    })
+  end,
   ['yamlls'] = function()
     require('lspconfig').yamlls.setup({
       filetypes = { 'yaml', 'yml' },
@@ -84,7 +108,10 @@ local handlers = {
           schemaDownload = { enable = true },
           validate = true,
           completion = true,
-          hover = true
+          hover = true,
+          format = {
+            enable = true,
+          },
         },
       },
     })
@@ -238,3 +265,20 @@ cmp.setup({
     completeopt = 'menu,menuone,noinsert',
   },
 })
+
+-- TODO: Workaround (2024-03-29): When yaml file is opened that should be handled by helm_ls language server.
+-- Only helm_ls client should be started. Because helm template can be .yaml file yamlls will also be started.
+-- This autocommand will stop yamlls client if filetype is helm.
+-- This should be solved differently, yamlls shoudn't be started at all. Check if there is some option for that
+-- implemented in helm_ls at some point.
+vim.api.nvim_create_autocmd(
+  'LspAttach',
+  {
+    callback = function(args)
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      if vim.bo[args.buf].filetype == 'helm' and client.name == 'yamlls' then
+        vim.cmd('LspStop ' .. args.data.client_id)
+      end
+    end
+  }
+)

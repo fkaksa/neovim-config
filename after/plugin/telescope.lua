@@ -5,6 +5,8 @@ local keymap = vim.keymap
 
 -- file pickers
 keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[T] Search Files' })
+keymap.set('n', '<leader>sF', function() builtin.find_files({ cwd = vim.fn.expand('%:p:h') }) end,
+  { desc = '[T] Search Files in current directory' })
 keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[T] Search by Grep' })
 keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[T] Search current word' })
 keymap.set('n', '<leader>gf', builtin.git_files, { desc = '[T] Search Git Files' })
@@ -27,10 +29,10 @@ telescope.setup {
   },
   extensions = {
     fzf = {
-      fuzzy = true,                         -- false will only do exact matching
-      override_generic_sorter = true,       -- override the generic sorter
-      override_file_sorter = true,          -- override the file sorter
-      case_mode = "smart_case",             -- smart_case (default) or "ignore_case" or "respect_case"
+      fuzzy = true,                   -- false will only do exact matching
+      override_generic_sorter = true, -- override the generic sorter
+      override_file_sorter = true,    -- override the file sorter
+      case_mode = "smart_case",       -- smart_case (default) or "ignore_case" or "respect_case"
     }
   }
 }

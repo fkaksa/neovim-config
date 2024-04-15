@@ -9,7 +9,6 @@ local keymap = vim.keymap
 
 -- use <esc> to exit terminal mode
 keymap.set('n', '<esc>', ':noh<esc>', { silent = true })
-
 -- buffers
 keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })

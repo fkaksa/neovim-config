@@ -3,7 +3,6 @@
 Check plugins:
 
 - https://github.com/pteroctopus/faster.nvim
-- breadcrumbs https://nvimdev.github.io/lspsaga/breadcrumbs/
 - json schemas https://www.arthurkoziel.com/json-schemas-in-neovim/
 - helm-ls
 - https://github.com/nvim-telescope/telescope.nvim/issues/2201
