@@ -1,7 +1,16 @@
+-- https://github.com/stevearc/conform.nvim
+
 local conform = require('conform')
 local keymap = vim.keymap
 
 conform.setup({
+  formatters_by_ft = {
+    json = { { "prettierd", "prettier" } },
+    yaml = { { "prettierd", "prettier" } },
+    -- not working
+    helm = { { "goimports", "golines" } },
+    sh = { { "shfmt" } },
+  },
   format_on_save = {
     -- These options will be passed to conform.format()
     timeout_ms = 500,

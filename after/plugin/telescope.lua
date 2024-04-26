@@ -3,23 +3,6 @@ local telescope = require('telescope')
 local trouble = require('trouble')
 local keymap = vim.keymap
 
--- file pickers
-keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[T] Search Files' })
-keymap.set('n', '<leader>sF', function() builtin.find_files({ cwd = vim.fn.expand('%:p:h') }) end,
-  { desc = '[T] Search Files in current directory' })
-keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[T] Search by Grep' })
-keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[T] Search current word' })
-keymap.set('n', '<leader>gf', builtin.git_files, { desc = '[T] Search Git Files' })
--- vim pickers
-keymap.set('n', '<leader><space>', function() builtin.buffers({ sort_lastused = true }) end,
-  { desc = '[T] Find existing buffers' })
-keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[T] Search keymaps' })
-keymap.set('n', '<leader>sc', builtin.commands, { desc = '[T] Search commands' })
-keymap.set('n', '<leader>ss', builtin.spell_suggest,
-  { desc = '[T] Search spelling suggestions for the current word under the cursor' })
--- lsp pickers
-keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[T] Search diagnostics' })
-
 telescope.setup {
   defaults = {
     mappings = {
@@ -40,3 +23,20 @@ telescope.setup {
 -- To get telescope extensions to work with telescope, you need to call
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
+
+-- file pickers
+keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[T] Search Files' })
+keymap.set('n', '<leader>sF', function() builtin.find_files({ cwd = vim.fn.expand('%:p:h') }) end,
+  { desc = '[T] Search Files in current directory' })
+keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[T] Search by Grep' })
+keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[T] Search current word' })
+keymap.set('n', '<leader>gf', builtin.git_files, { desc = '[T] Search Git Files' })
+-- vim pickers
+keymap.set('n', '<leader><space>', function() builtin.buffers({ sort_lastused = true }) end,
+  { desc = '[T] Find existing buffers' })
+keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[T] Search keymaps' })
+keymap.set('n', '<leader>sc', builtin.commands, { desc = '[T] Search commands' })
+keymap.set('n', '<leader>ss', builtin.spell_suggest,
+  { desc = '[T] Search spelling suggestions for the current word under the cursor' })
+-- lsp pickers
+keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[T] Search diagnostics' })

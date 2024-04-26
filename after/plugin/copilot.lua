@@ -5,7 +5,7 @@ copilot.setup({
     enabled = true,
     auto_trigger = true,
     debounce = 75,
-    -- accept = false
+    -- accept = false,
     keymap = {
       accept = '<Tab>',
       accept_word = false,
@@ -16,6 +16,7 @@ copilot.setup({
   panel = { enabled = false },
   filetype = {
     yaml = true,
+    helm = true,
     toml = true,
     json = true,
     lua = true,
