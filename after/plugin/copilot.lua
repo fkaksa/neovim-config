@@ -14,7 +14,7 @@ copilot.setup({
     },
   },
   panel = { enabled = false },
-  filetype = {
+  filetypes = {
     yaml = true,
     helm = true,
     toml = true,
