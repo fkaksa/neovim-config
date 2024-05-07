@@ -14,29 +14,7 @@ lsp_zero.on_attach(function(client, bufnr)
   keymap.set({ 'n' }, 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr, desc = '[L] References' })
   keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
   keymap.set({ 'n' }, '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
-
-  -- -- Create a command `:Format` local to the LSP buffer
-  -- vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-  --   vim.lsp.buf.format()
-  -- end, { desc = 'Format current buffer with LSP' })
 end)
-
--- Format code
--- vim.keymap.set(
---   'n', '<leader>f',
---   function()
---     if vim.bo.filetype == 'markdown' then
---       vim.bo.textwidth = 160
---       vim.o.colorcolumn = '160'
---       vim.api.nvim_command(':w')
---       vim.api.nvim_command(':silent !deno fmt %')
---       print('Deno format complete')
---     else
---       vim.api.nvim_command(':Format')
---     end
---   end,
---   { desc = '[B] Format buffer with external tool of language server' }
--- )
 
 -- too see if the lsp is working properly you can use the following command
 -- :lua require('lsp-zero.check').inspect_settings('<server>')

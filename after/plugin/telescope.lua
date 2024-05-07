@@ -1,6 +1,5 @@
 local builtin = require('telescope.builtin')
 local telescope = require('telescope')
-local trouble = require('trouble')
 local keymap = vim.keymap
 
 -- function copied from https://github.com/nvim-telescope/telescope.nvim/issues/1048#issuecomment-1679797700
@@ -44,6 +43,9 @@ telescope.setup {
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
 
+--
+-- KEYMAPS
+--
 -- file pickers
 keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[T] Search Files' })
 keymap.set('n', '<leader>sF', function() builtin.find_files({ cwd = vim.fn.expand('%:p:h') }) end,
@@ -51,6 +53,7 @@ keymap.set('n', '<leader>sF', function() builtin.find_files({ cwd = vim.fn.expan
 keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[T] Search by Grep' })
 keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[T] Search current word' })
 keymap.set('n', '<leader>gf', builtin.git_files, { desc = '[T] Search Git Files' })
+
 -- vim pickers
 keymap.set('n', '<leader><space>', function() builtin.buffers({ sort_lastused = true }) end,
   { desc = '[T] Find existing buffers' })
@@ -58,5 +61,10 @@ keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[T] Search keymaps' })
 keymap.set('n', '<leader>sc', builtin.commands, { desc = '[T] Search commands' })
 keymap.set('n', '<leader>ss', builtin.spell_suggest,
   { desc = '[T] Search spelling suggestions for the current word under the cursor' })
+keymap.set('n', '<leader>sq', builtin.quickfix, { desc = '[T] Search quickfix list' })
+keymap.set('n', '<leader>sh', builtin.command_history, { desc = '[T] Search command history' })
+keymap.set('n', '<leader>sr', builtin.resume,
+  { desc = '[T] Lists the results incl. multi-selections of the previous picker' })
+
 -- lsp pickers
 keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[T] Search diagnostics' })

@@ -33,5 +33,6 @@ copilot.setup({
     gitcommit = true,
     yml = true,
     sh = true,
+    groovy = true,
   },
 })
