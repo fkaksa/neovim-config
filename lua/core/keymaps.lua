@@ -28,3 +28,10 @@ keymap.set({ 'n' }, '<leader>64', 'yaW:echo system("base64 -d", @")<cr>')
 -- better indenting
 keymap.set("v", "<", "<gv")
 keymap.set("v", ">", ">gv")
+
+-- copy relative file path to clipboard
+keymap.set("n", "<leader>yd", ":let @*=expand('%')<CR>", { desc = "[FILE] Copy relative file path to clipboard" })
+-- copy file path to clipboard
+keymap.set("n", "<leader>yp", ":let @*=expand('%:p')<CR>", { desc = "[FILE] Copy file path to clipboard" })
+-- copy directory path to clipboard
+keymap.set("n", "<leader>yD", ":let @*=expand('%:p:h')<CR>", { desc = "[FILE] Copy directory path to clipboard" })
