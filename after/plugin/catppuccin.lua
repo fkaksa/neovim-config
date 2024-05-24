@@ -32,13 +32,13 @@ catppuccin.setup({
     operators = {},
     -- miscs = {}, -- Uncomment to turn off hard-coded styles
   },
-  color_overrides = {
-    mocha = {
-      base = "#000000",
-      mantle = "#000000",
-      crust = "#000000",
-    },
-  },
+  -- color_overrides = {
+  --   mocha = {
+  --     base = "#000000",
+  --     mantle = "#000000",
+  --     crust = "#000000",
+  --   },
+  -- },
   -- check color pallete:
   -- https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
   -- https://github.com/catppuccin/nvim/blob/d97387aea8264f484bb5d5e74f2182a06c83e0d8/lua/catppuccin/palettes/mocha.lua
