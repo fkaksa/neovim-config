@@ -19,5 +19,10 @@ return {
     cond = function()
       return vim.fn.executable 'make' == 1
     end,
-  }
+  },
+  {
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    version = "^1.0.0",
+  },
+
 }
