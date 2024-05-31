@@ -55,21 +55,23 @@ telescope.setup {
       -- layout_config = { mirror=true }, -- mirror preview pane
     }
   },
-  -- pickers = {
-  --   oldfiles = {
-  --     sort_lastused = true,
-  --     cwd_only = true,
-  --     path_display = { 'filename_first' },
-  --   },
-  --   find_files = {
-  --     hidden = true,
-  --     find_command = {
-  --       'rg',
-  --       '--files',
-  --       '--color',
-  --       'never',
-  --     },
-  --   },
+  pickers = {
+    -- oldfiles = {
+    --   sort_lastused = true,
+    --   cwd_only = true,
+    --   path_display = { 'filename_first' },
+    -- },
+    find_files = {
+      hidden = false,
+      no_ignore = true,
+      -- find_command = {
+      --   'rg',
+      --   '--files',
+      --   '--color',
+      --   'never',
+      -- },
+    },
+  },
   --   live_grep = {
   --     path_display = { 'shorten' },
   --     mappings = {
