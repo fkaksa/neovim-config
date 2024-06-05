@@ -55,10 +55,28 @@ local handlers = {
         path = "yaml-language-server",
         config = {
           schemas = {
-            kubernetes = "templates/**",
+            -- helm unittest
+            ["https://raw.githubusercontent.com/helm-unittest/helm-unittest/v0.4.1/schema/helm-testsuite.json"] =
+            "tests/*_test.yaml",
+            ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+            ["http://json.schemastore.org/kustomization"] = "kustomization.{yml,yaml}",
+            ["http://json.schemastore.org/ansible-playbook"] = "*play*.{yml,yaml}",
+            ["http://json.schemastore.org/chart"] = "Chart.{yml,yaml}",
+            ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] =
+            "*docker-compose*.{yml,yaml}",
+            ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] =
+            "helmfile.{yml,yaml}",
+            kubernetes = "/*.yaml",
           },
+          schemaStore = {
+            enable = true,
+          },
+          validate = true,
           completion = true,
           hover = true,
+          format = {
+            enable = true,
+          },
           -- any other config from https://github.com/redhat-developer/yaml-language-server#language-server-settings
         }
       }
@@ -81,14 +99,19 @@ local handlers = {
             "*docker-compose*.{yml,yaml}",
             ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] =
             "helmfile.{yml,yaml}",
-            -- kubernetes = "/*.yaml",
+            kubernetes = "/*.yaml",
           },
-          schemaDownload = { enable = true },
+          schemaStore = {
+            enable = true,
+          },
           validate = true,
           completion = true,
           hover = true,
           format = {
             enable = true,
+          },
+          trace = {
+            server = "verbose"
           },
         },
       },

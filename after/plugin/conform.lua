@@ -8,7 +8,7 @@ conform.setup({
     json = { { "prettierd", "prettier" } },
     yaml = { { "prettierd", "prettier" } },
     -- not working
-    helm = { { "goimports", "golines" } },
+    helm = {},
     sh = { { "shfmt" } },
   },
   format_on_save = {
