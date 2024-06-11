@@ -2,6 +2,7 @@
 
 Check plugins:
 
+- https://github.com/akinsho/toggleterm.nvim
 - https://github.com/pteroctopus/faster.nvim
 - json schemas https://www.arthurkoziel.com/json-schemas-in-neovim/
 - https://github.com/fredrikaverpil/dotfiles/blob/main/nvim-lazyvim/lua/plugins/ai.lua
