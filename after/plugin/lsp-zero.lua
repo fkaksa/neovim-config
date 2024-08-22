@@ -1,4 +1,7 @@
 local lsp_zero = require('lsp-zero')
+local cmp = require('cmp')
+local luasnip = require('luasnip')
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
 lsp_zero.on_attach(function(client, bufnr)
   local keymap = vim.keymap
@@ -25,7 +28,12 @@ local handlers = {
   -- and will be called for each installed server that doesn't have
   -- a dedicated handler.
   function(server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup {}
+    require("lspconfig")[server_name].setup {
+      settings = {
+        -- TODO: not working as expected
+        inlay_hints = { enabled = true },
+      }
+    }
   end,
   -- Next, you can provide targeted overrides for specific servers.
   ["lua_ls"] = function()
@@ -50,6 +58,7 @@ local handlers = {
       },
       yamlls = {
         enabled = true,
+        enabledForFilesGlob = "*.{yaml,yml}",
         diagnosticsLimit = 50,
         showDiagnosticsDirectly = false,
         path = "yaml-language-server",
@@ -99,7 +108,7 @@ local handlers = {
             "*docker-compose*.{yml,yaml}",
             ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] =
             "helmfile.{yml,yaml}",
-            kubernetes = "/*.yaml",
+            -- kubernetes = "/*.yaml",
           },
           schemaStore = {
             enable = true,
@@ -148,13 +157,18 @@ local handlers = {
   end,
   ['gopls'] = function()
     require('lspconfig').gopls.setup({
-      filetypes = { 'go' },
+      filetypes = { 'go', 'gomod', 'gowrok', 'gotpml' },
       settings = {
         gopls = {
           analyses = {
             unusedparams = true,
           },
           staticcheck = true,
+          completeUnimported = true,
+          usePlaceholders = true,
+          hints = {
+            assignVariableTypes = true,
+          }
         },
       },
     })
@@ -212,7 +226,7 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls' },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 
@@ -222,10 +236,13 @@ require('mason-lspconfig').setup_handlers(handlers)
 
 -- this is the function that loads the extra snippets to luasnip
 -- from rafamadriz/friendly-snippets
-local luasnip = require('luasnip')
 require('luasnip.loaders.from_vscode').lazy_load()
 
-local cmp = require('cmp')
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
+
 cmp.setup({
   sources = {
     -- Copilot Source
@@ -283,3 +300,10 @@ vim.api.nvim_create_autocmd(
     end
   }
 )
+
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  pattern = 'Chart.yaml',
+  callback = function()
+    vim.opt_local.filetype = 'helm'
+  end
+})

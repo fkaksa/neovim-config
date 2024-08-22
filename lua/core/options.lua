@@ -17,11 +17,13 @@ vim.o.mouse = 'v'
 vim.o.mouse = 'a'
 
 -- Save undo history
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.undodir = os.getenv('HOME') .. '/.vim/undodir'
 vim.o.undofile = true
 
 -- highlight search
 vim.o.hlsearch = true
-
 -- incremental search
 vim.o.incsearch = true
 
@@ -62,4 +64,10 @@ vim.o.ttyfast = true
 vim.o.listchars = 'tab:»·,trail:·,extends:>,precedes:<,eol:$,space:·'
 
 -- Keep 3 lines below and above the cursor
-vim.o.scrolloff = 5
+vim.o.scrolloff = 8
+
+-- Fold settings
+vim.o.foldlevel = 10
+
+-- terminal color
+vim.o.termguicolors = true

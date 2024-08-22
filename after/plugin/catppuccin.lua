@@ -62,5 +62,10 @@ catppuccin.setup({
       enabled = true,
       indentscope_color = "",
     },
-  },
+    indent_blankline = {
+      enabled = true,
+      scope_color = "", -- catppuccin color (eg. `lavender`) Default: text
+      colored_indent_levels = false,
+    },
+  }
 })
