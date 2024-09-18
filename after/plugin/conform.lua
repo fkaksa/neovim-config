@@ -5,12 +5,12 @@ local keymap = vim.keymap
 
 conform.setup({
   formatters_by_ft = {
-    json = { { "prettierd", "prettier" } },
-    yaml = { { "prettierd", "prettier" } },
+    json = { "prettierd", "prettier", stop_after_first = true },
+    yaml = { "prettierd", "prettier", stop_after_first = true },
     -- not working
     helm = {},
-    sh = { { "shfmt" } },
-    go = { "golines", "goimports-reviser" },
+    sh = { "shfmt" },
+    go = { "golines", "goimports-reviser", stop_after_first = true },
   },
   format_on_save = {
     -- These options will be passed to conform.format()
