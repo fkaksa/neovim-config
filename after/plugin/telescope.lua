@@ -113,6 +113,7 @@ keymap.set('n', '<leader>sq', builtin.quickfix, { desc = '[T] Search quickfix li
 keymap.set('n', '<leader>sh', builtin.command_history, { desc = '[T] Search command history' })
 keymap.set('n', '<leader>sr', builtin.resume,
   { desc = '[T] Lists the results incl. multi-selections of the previous picker' })
+keymap.set('n', '<leader>sb', builtin.current_buffer_fuzzy_find, { desc = '[T] Find in current buffer' })
 
 -- lsp pickers
 keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[T] Search diagnostics' })

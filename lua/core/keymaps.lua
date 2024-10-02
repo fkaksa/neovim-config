@@ -4,8 +4,7 @@ vim.g.mapleader = ' '
 -- for more information on keymaps, see :h nvim_set_keymap
 local keymap = vim.keymap
 
----------------------
--- General Keymaps -------------------
+--------------------- General Keymaps -------------------
 
 -- use <esc> to exit terminal mode
 keymap.set('n', '<esc>', ':noh<esc>', { silent = true })
@@ -39,3 +38,7 @@ keymap.set("n", "<leader>yd", ":let @*=expand('%:p:h')<CR>",
 -- copy relative directory path to clipboard
 keymap.set("n", "<leader>yD", ":let @*=substitute(expand('%:p:h'), getcwd() .. '/', '', '')<CR>",
   { desc = "[FILE] Copy relative path from getcwd to clipboard" })
+
+-- add current line into quickfix list
+keymap.set("n", "<leader>qa", ':caddexpr expand("%") .. ":" .. line(".") ..  ":" .. getline(".")<CR>',
+  { desc = "[QUICKFIX] Add current line to quickfix list" })
