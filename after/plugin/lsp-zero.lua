@@ -220,13 +220,23 @@ local handlers = {
       },
     })
   end,
+  ['lemminx'] = function()
+    require('lspconfig').lemminx.setup({
+      filetypes = { 'xml' },
+    })
+  end,
+  ['marksman'] = function()
+    require('lspconfig').marksman.setup({
+      filetypes = { 'markdown' },
+    })
+  end,
 }
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman' },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 
