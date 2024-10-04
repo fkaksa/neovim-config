@@ -1,3 +1,5 @@
+-- https://github.com/CopilotC-Nvim/CopilotChat.nvim/tree/canary
+-- had to install tiktoken to get it to work: sudo luarocks install --lua-version 5.1 tiktoken_core
 return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
@@ -8,10 +10,7 @@ return {
       { 'nvim-telescope/telescope.nvim' },
     },
     build = "make tiktoken", -- Only on MacOS or Linux
-    opts = {
-      debug = true,          -- Enable debugging
-      -- See Configuration section for rest
-    },
+    opts = {},
     -- See Commands section for default commands if you want to lazy load on them
   },
 }
