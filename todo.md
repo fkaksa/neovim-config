@@ -1,5 +1,13 @@
 # TO DO
 
+Commands:
+
+- windo diffthis
+- windo diffoff
+- windo diffupdate
+- windo diffget
+- windo diffput
+
 Check plugins:
 
 - https://github.com/akinsho/toggleterm.nvim

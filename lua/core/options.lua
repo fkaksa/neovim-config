@@ -51,9 +51,6 @@ vim.wo.number = true
 -- set relative numbers
 vim.o.relativenumber = true
 
--- get bash-like tab completions
-vim.o.wildmode = 'longest,list'
-
 -- using system clipboard
 vim.o.clipboard = 'unnamedplus'
 
