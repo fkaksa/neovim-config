@@ -7,6 +7,7 @@ Commands:
 - windo diffupdate
 - windo diffget
 - windo diffput
+- echo @# - file location
 
 Check plugins:
 

@@ -230,13 +230,18 @@ local handlers = {
       filetypes = { 'markdown' },
     })
   end,
+  ['pyright'] = function()
+    require('lspconfig').pyright.setup({
+      filetypes = { 'python' },
+    })
+  end,
 }
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman' },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright' },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 
