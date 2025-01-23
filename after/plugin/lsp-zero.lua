@@ -235,13 +235,18 @@ local handlers = {
       filetypes = { 'python' },
     })
   end,
+  ['terraformls'] = function()
+    require('lspconfig').terraformls.setup({
+      filetypes = { 'terraform', 'tf' },
+    })
+  end,
 }
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright' },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright', 'terraformls' },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 

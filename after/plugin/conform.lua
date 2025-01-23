@@ -11,6 +11,7 @@ conform.setup({
     helm = {},
     sh = { "shfmt" },
     go = { "golines", "goimports-reviser", stop_after_first = true },
+    terraform = {},
   },
   format_on_save = {
     -- These options will be passed to conform.format()

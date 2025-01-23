@@ -16,3 +16,4 @@ keymap.set("n", "<leader>cl", "<cmd>Trouble lsp toggle focus=false win.position=
   { desc = "LSP Definitions / references / ... (Trouble)" })
 keymap.set("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>", { desc = "Location List (Trouble)" })
 keymap.set("n", "<leader>xq", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix List (Trouble)" })
+-- keymap.set("n", "<leader>gR", "<cmd>Trouble lsp_references toggle<cr>", { desc = "LSP References (Trouble)" })

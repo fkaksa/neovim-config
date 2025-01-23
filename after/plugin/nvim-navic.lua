@@ -30,6 +30,13 @@ navic.setup {
     Operator = ' ',
     TypeParameter = ' '
   },
+  lsp = {
+    auto_attach = true,
+    preference = {
+      "helm_ls",
+      "yamlls",
+    }
+  },
   click = true
 }
 
@@ -50,5 +57,5 @@ keymap.set('n', '<leader>yb',
     end
     vim.fn.setreg('*', breadcrumb)
   end,
-  { noremap = true, silent = true, desc = 'Copy breadcrumb to clipboard'}
+  { noremap = true, silent = true, desc = 'Copy breadcrumb to clipboard' }
 )
