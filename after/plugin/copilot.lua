@@ -1,4 +1,5 @@
 local copilot = require('copilot')
+local keymap = vim.keymap
 
 copilot.setup({
   suggestion = {
@@ -36,3 +37,8 @@ copilot.setup({
     groovy = true,
   },
 })
+
+-- enable copilot
+keymap.set('n', '<leader>ce', ':Copilot enable<CR>', { desc = 'Enable copilot' })
+-- disable copilot
+keymap.set('n', '<leader>cd', ':Copilot disable<CR>', { desc = 'Disable copilot' })

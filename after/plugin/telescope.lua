@@ -23,15 +23,24 @@ local select_one_or_multi = function(prompt_bufnr)
   end
 end
 
+local open_with_trouble = require("trouble.sources.telescope").open
+
+-- Use this to add more results without clearing the trouble list
+local add_to_trouble = require("trouble.sources.telescope").add
+
 telescope.setup {
   defaults = {
     mappings = {
       i = {
         ['<CR>'] = select_one_or_multi,
+        ["<c-t>"] = open_with_trouble,
+        -- ["<c-z>"] = add_to_trouble
       },
       n = {
         ['<CR>'] = select_one_or_multi,
-      }
+        ["<c-t>"] = open_with_trouble,
+        -- ["<c-z>"] = add_to_trouble
+      },
     },
   },
   extensions = {
@@ -53,6 +62,11 @@ telescope.setup {
       -- theme = "dropdown", -- use dropdown theme
       -- theme = { }, -- use own theme spec
       -- layout_config = { mirror=true }, -- mirror preview pane
+    },
+    ["ui-select"] = {
+      require("telescope.themes").get_dropdown {
+        -- even more opts
+      }
     }
   },
   pickers = {
@@ -88,6 +102,7 @@ telescope.setup {
 -- load_extension, somewhere after setup function:
 telescope.load_extension('fzf')
 telescope.load_extension("live_grep_args")
+telescope.load_extension("ui-select")
 
 --
 -- KEYMAPS
@@ -116,4 +131,5 @@ keymap.set('n', '<leader>sr', builtin.resume,
 keymap.set('n', '<leader>sb', builtin.current_buffer_fuzzy_find, { desc = '[T] Find in current buffer' })
 
 -- lsp pickers
+-- check lsp-zero configuration for more telescope keymaps
 keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[T] Search diagnostics' })

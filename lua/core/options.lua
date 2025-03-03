@@ -60,7 +60,7 @@ vim.o.ttyfast = true
 -- Set characters to used when ```set list``` is on
 vim.o.listchars = 'tab:»·,trail:·,extends:>,precedes:<,eol:$,space:·'
 
--- Keep 3 lines below and above the cursor
+-- Keep 8 lines below and above the cursor
 vim.o.scrolloff = 8
 
 -- Fold settings
@@ -68,3 +68,7 @@ vim.o.foldlevel = 10
 
 -- terminal color
 vim.o.termguicolors = true
+
+-- Reserve a space in the gutter
+-- This will avoid an annoying layout shift in the screen
+vim.opt.signcolumn = 'yes'

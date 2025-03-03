@@ -67,5 +67,7 @@ catppuccin.setup({
       scope_color = "", -- catppuccin color (eg. `lavender`) Default: text
       colored_indent_levels = false,
     },
+    copilot_vim = true,
+    lsp_trouble = true,
   }
 })

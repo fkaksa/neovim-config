@@ -13,6 +13,7 @@ configs.setup({
     "yaml",
     "json",
     "markdown_inline",
+    "terraform",
   },
   sync_install = false,
   highlight = { enable = true },

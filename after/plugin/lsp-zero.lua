@@ -2,6 +2,16 @@ local lsp_zero = require('lsp-zero')
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+local telescope = require("telescope.builtin")
+
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
 
 lsp_zero.on_attach(function(client, bufnr)
   local keymap = vim.keymap
@@ -14,10 +24,23 @@ lsp_zero.on_attach(function(client, bufnr)
   })
 
   -- extra keymaps
-  keymap.set({ 'n' }, 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr, desc = '[L] References' })
+  keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr, desc = '[L] References' })
+  keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { desc = '[T] Search LSP definitions' })
+  keymap.set('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = '[T] Search LSP type definitions' })
+  keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = '[T] Search LSP implementations' })
   keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
-  keymap.set({ 'n' }, '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
+  keymap.set('n', '<leader>lR', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
 end)
+
+lsp_zero.ui({
+  float_border = 'rounded',
+  sign_text = {
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = '»',
+  },
+})
 
 -- too see if the lsp is working properly you can use the following command
 -- :lua require('lsp-zero.check').inspect_settings('<server>')
@@ -108,6 +131,7 @@ local handlers = {
             "*docker-compose*.{yml,yaml}",
             ["https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/schemas/json/helmfile.json"] =
             "helmfile.{yml,yaml}",
+            ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
             -- kubernetes = "/*.yaml",
           },
           schemaStore = {
@@ -237,16 +261,28 @@ local handlers = {
   end,
   ['terraformls'] = function()
     require('lspconfig').terraformls.setup({
-      filetypes = { 'terraform', 'tf' },
+      -- on_attach = function(client)
+      -- end,
+      cmd = { "terraform-ls", "serve", "-req-concurrency", "20" },
+      validations = {
+        enableEnhancedValidation = true,
+      },
+      init_options = {
+        experimentalFeatures = {
+          prefillRequiredFields = true,
+          validateOnSave = true,
+        }
+      }
     })
+  end,
+  ['tflint'] = function()
+    require('lspconfig').tflint.setup({})
   end,
 }
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  -- Replace the language servers listed here
-  -- with the ones you want to install
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright', 'terraformls' },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright', 'terraformls', 'tflint' },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 
@@ -276,7 +312,12 @@ cmp.setup({
   },
   formatting = lsp_zero.cmp_format(),
   mapping = {
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<TAB>'] = cmp.mapping.confirm({
+      -- documentation says this is important.
+      -- I don't know why.
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = false
+    }),
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<C-e>'] = cmp.mapping.abort(),
     ['<C-p>'] = cmp.mapping(function()
@@ -327,3 +368,60 @@ vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
     vim.opt_local.filetype = 'helm'
   end
 })
+
+-- copied by https://github.com/MariaSolOs/dotfiles/blob/bda5388e484497b8c88d9137c627c0f24ec295d7/.config/nvim/lua/lsp.lua#L193
+local methods = vim.lsp.protocol.Methods
+local md_namespace = vim.api.nvim_create_namespace 'mariasolos/lsp_float'
+---LSP handler that adds extra inline highlights, keymaps, and window options.
+---Code inspired from `noice`.
+---@param handler fun(err: any, result: any, ctx: any, config: any): integer, integer
+---@return function
+local function enhanced_float_handler(handler)
+  return function(err, result, ctx, config)
+    local buf, win = handler(
+      err,
+      result,
+      ctx,
+      vim.tbl_deep_extend('force', config or {}, {
+        border = 'rounded',
+        max_height = math.floor(vim.o.lines * 0.5),
+        max_width = math.floor(vim.o.columns * 0.4),
+      })
+    )
+
+    if not buf or not win then
+      return
+    end
+
+    -- Conceal everything.
+    vim.wo[win].concealcursor = 'n'
+
+    -- Extra highlights.
+    for l, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
+      for pattern, hl_group in pairs {
+        ['|%S-|'] = '@text.reference',
+        ['@%S+'] = '@parameter',
+        ['^%s*(Parameters:)'] = '@text.title',
+        ['^%s*(Return:)'] = '@text.title',
+        ['^%s*(See also:)'] = '@text.title',
+        ['{%S-}'] = '@parameter',
+      } do
+        local from = 1 ---@type integer?
+        while from do
+          local to
+          from, to = line:find(pattern, from)
+          if from then
+            vim.api.nvim_buf_set_extmark(buf, md_namespace, l - 1, from - 1, {
+              end_col = to,
+              hl_group = hl_group,
+            })
+          end
+          from = to and to + 1 or nil
+        end
+      end
+    end
+  end
+end
+
+vim.lsp.handlers[methods.textDocument_hover] = enhanced_float_handler(vim.lsp.handlers.hover)
+vim.lsp.handlers[methods.textDocument_signatureHelp] = enhanced_float_handler(vim.lsp.handlers.signature_help)
