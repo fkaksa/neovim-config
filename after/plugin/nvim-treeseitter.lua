@@ -14,6 +14,7 @@ configs.setup({
     "json",
     "markdown_inline",
     "terraform",
+    "kotlin",
   },
   sync_install = false,
   highlight = { enable = true },

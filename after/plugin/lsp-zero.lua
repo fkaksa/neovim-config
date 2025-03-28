@@ -278,11 +278,14 @@ local handlers = {
   ['tflint'] = function()
     require('lspconfig').tflint.setup({})
   end,
+  ['kotlin_language_server'] = function()
+    require('lspconfig').kotlin_language_server.setup({})
+  end,
 }
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright', 'terraformls', 'tflint' },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright', 'terraformls', 'tflint', 'kotlin_language_server' },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 

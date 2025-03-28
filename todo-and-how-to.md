@@ -15,6 +15,8 @@ Check plugins:
 - json schemas https://www.arthurkoziel.com/json-schemas-in-neovim/
 - https://github.com/fredrikaverpil/dotfiles/blob/main/nvim-lazyvim/lua/plugins/ai.lua
 - https://github.com/tpope/vim-fugitive
+- diffview.nvim
+- vim-flog
 
 Others:
 
