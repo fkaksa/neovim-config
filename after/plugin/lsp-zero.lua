@@ -254,9 +254,18 @@ local handlers = {
       filetypes = { 'markdown' },
     })
   end,
-  ['pyright'] = function()
-    require('lspconfig').pyright.setup({
+  ['basedpyright'] = function()
+    require('lspconfig').basedpyright.setup({
       filetypes = { 'python' },
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = 'basic',
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+          }
+        }
+      }
     })
   end,
   ['terraformls'] = function()
@@ -285,7 +294,7 @@ local handlers = {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'pyright', 'terraformls', 'tflint', 'kotlin_language_server' },
+  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'basedpyright', 'terraformls', 'tflint', 'kotlin_language_server' },
 })
 require('mason-lspconfig').setup_handlers(handlers)
 
@@ -364,7 +373,6 @@ vim.api.nvim_create_autocmd(
     end
   }
 )
-
 vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
   pattern = 'Chart.yaml',
   callback = function()

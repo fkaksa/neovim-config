@@ -11,6 +11,7 @@ conform.setup({
     helm = {},
     sh = { "shfmt" },
     go = { "golines", "goimports-reviser", stop_after_first = true },
+    python = { "autopep8" },
     terraform = { "terraform_fmt" },
   },
   format_on_save = {
