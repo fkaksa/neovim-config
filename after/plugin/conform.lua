@@ -7,6 +7,7 @@ conform.setup({
   formatters_by_ft = {
     json = { "prettierd", "prettier", stop_after_first = true },
     yaml = { "prettierd", "prettier", stop_after_first = true },
+    gitconfig = { "pyproject-fmt", stop_after_first = true },
     -- not working
     helm = {},
     sh = { "shfmt" },
