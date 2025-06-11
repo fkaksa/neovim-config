@@ -22,6 +22,8 @@ return {
   },
   {
     "nvim-telescope/telescope-live-grep-args.nvim",
+    -- TODO: Consider upgrading to 1.1.0
+    -- I saw that the latest version has some different picker for C-space
     version = "^1.0.0",
   },
   { 'nvim-telescope/telescope-ui-select.nvim' },

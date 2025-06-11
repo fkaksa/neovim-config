@@ -1,0 +1,18 @@
+nvim-treesitter[bash]: Could not create tree-sitter-bash-tmp
+mkdir: cannot create directory 'tree-sitter-bash-tmp': File exists
+
+[mason-lspconfig.nvim] installing marksman
+Error executing vim.schedule lua callback: ...are/nvim/lazy/mason.nvim/lua/mason-core/package/init.lua:122: Package is already installing.
+stack traceback:
+        [C]: in function 'assert'
+        ...are/nvim/lazy/mason.nvim/lua/mason-core/package/init.lua:122: in function 'install'
+        ...azy/mason-lspconfig.nvim/lua/mason-lspconfig/install.lua:12: in function 'install'
+        ...-lspconfig.nvim/lua/mason-lspconfig/ensure_installed.lua:28: in function 'fn'
+        ...l/share/nvim/lazy/mason.nvim/lua/mason-core/optional.lua:105: in function 'if_present'
+        ...-lspconfig.nvim/lua/mason-lspconfig/ensure_installed.lua:24: in function ''
+        vim/_editor.lua: in function <vim/_editor.lua:0>
+
+
+[mason-lspconfig.nvim] failed to install groovyls. Installation logs are available in :Mason and :MasonLog
+
+
