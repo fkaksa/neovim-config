@@ -46,8 +46,16 @@ catppuccin.setup({
   highlight_overrides = {
     mocha = function(mocha)
       return {
-        Comment = { fg = mocha.overlay2 },
-        LineNr = { fg = mocha.subtext0 },
+        Comment    = { fg = mocha.overlay2 },
+        LineNr     = { fg = mocha.subtext0 },
+        DiffAdd    = { fg = mocha.green, bg = "NONE", style = { "bold" } },
+        DiffChange = { fg = mocha.blue, bg = "NONE" },
+        DiffDelete = { fg = mocha.red, bg = "NONE", style = { "italic" } },
+        DiffText   = { fg = mocha.yellow, bg = "NONE", style = { "bold", "underline" } },
+        -- DiffAdd    = { bg = mocha.green },
+        -- DiffChange = { fg = mocha.blue },
+        -- DiffDelete = { fg = mocha.red },
+        -- DiffText   = { fg = mocha.yellow, style = { "bold", "italic" } },
       }
     end,
   },
@@ -69,5 +77,6 @@ catppuccin.setup({
     },
     copilot_vim = true,
     lsp_trouble = true,
+    diffview = true,
   }
 })
