@@ -1,3 +1,3 @@
 require('core.keymaps')
 require('core.options')
--- require('core.additional-filetypes')
+require('core.filetypes')
