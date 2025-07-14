@@ -67,3 +67,4 @@ This repository contains a custom Neovim configuration designed to enhance the d
    Then run `:Lazy` or the equivalent command for your package manager.
 
 3. Enjoy your enhanced Neovim setup!
+
