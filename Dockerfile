@@ -13,11 +13,20 @@ RUN apt-get update && apt-get install -y \
   fd-find \
   openjdk-17-jdk-headless \
   golang \
+  build-essential \
+  libreadline-dev \
+  libncurses5-dev \
+  libssl-dev \
+  lua5.1 \
+  lua5.1-dev \
+  libreadline-dev \
   python3 \
   python3-pip \
   python3-venv \
-  python-is-python3 &&\
-  curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
+  python-is-python3 \
+  locales && \
+  locale-gen en_US.UTF-8 && \
+  update-locale LANG=en_US.UTF-8curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
   apt-get install -y nodejs && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
@@ -28,12 +37,29 @@ RUN curl -LO https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
   rm go${GO_VERSION}.linux-amd64.tar.gz
 ENV PATH="/usr/local/go/bin:${PATH}"
 
+ENV TREE_SITTER_VERSION=0.25.8
+RUN curl -LO https://github.com/tree-sitter/tree-sitter/releases/download/v${TREE_SITTER_VERSION}/tree-sitter-linux-x64.gz && \
+  gunzip tree-sitter-linux-x64.gz && \
+  chmod +x tree-sitter-linux-x64 && \
+  mv tree-sitter-linux-x64 /usr/local/bin/tree-sitter
+
+ENV LUAROCKS_VERSION=3.11.0
+RUN curl -L https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz | tar xz && \
+  cd luarocks-${LUAROCKS_VERSION} && \
+  ./configure --with-lua-include=/usr/include/lua5.4 && \
+  make && make install && \
+  cd .. && rm -rf luarocks-${LUAROCKS_VERSION}
+
 # Create symlink for fd
 RUN ln -s $(which fdfind) /usr/local/bin/fd
 
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
 FROM base AS nvim
 
-ENV NVIM_VERSION=0.10.4
+ENV NVIM_VERSION=0.11.3
 RUN curl -LO https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim-linux-x86_64.tar.gz && \
   tar xzf nvim-linux-x86_64.tar.gz && \
   mv nvim-linux-x86_64 /opt/nvim && \
@@ -49,6 +75,8 @@ RUN mkdir -p /root/.config/nvim
 COPY init.lua /root/.config/nvim/
 COPY lua/ /root/.config/nvim/lua
 COPY after/ /root/.config/nvim/after
+
+WORKDIR /.config/nvim
 
 # Start in Neovim
 ENTRYPOINT ["/bin/bash"]
