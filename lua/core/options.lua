@@ -72,3 +72,6 @@ vim.o.termguicolors = true
 -- Reserve a space in the gutter
 -- This will avoid an annoying layout shift in the screen
 vim.opt.signcolumn = 'yes'
+
+-- filetype and highlighting work correctly after a session is restored.
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"

@@ -12,6 +12,12 @@ RUN apt-get update && apt-get install -y \
   ripgrep \
   fd-find \
   openjdk-17-jdk-headless \
+  lynx \
+  cargo \
+  ruby \
+  gem \
+  composer \
+  php \
   golang \
   build-essential \
   libreadline-dev \
@@ -46,9 +52,25 @@ RUN curl -LO https://github.com/tree-sitter/tree-sitter/releases/download/v${TRE
 ENV LUAROCKS_VERSION=3.11.0
 RUN curl -L https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz | tar xz && \
   cd luarocks-${LUAROCKS_VERSION} && \
-  ./configure --with-lua-include=/usr/include/lua5.4 && \
+  ./configure --with-lua-include=/usr/include/lua5.1 && \
   make && make install && \
   cd .. && rm -rf luarocks-${LUAROCKS_VERSION}
+
+# Install nvm, Node.js (v22), and npm as the user
+# TODO
+# Install nvm, Node.js (v22), and npm as the user
+# Create a script file sourced by both interactive and non-interactive bash shells
+ENV BASH_ENV=/root/.bash_env
+RUN touch "${BASH_ENV}"
+RUN echo '. "${BASH_ENV}"' >> ~/.bashrc
+
+# Download and install nvm, npm and Node.js (v22)
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | PROFILE="${BASH_ENV}" bash && \
+  echo 'nvm install 22 && nvm use 22 && nvm alias default 22' >> /root/.bashrc && \
+  bash -lc "nvm install 22 && nvm use 22 && nvm alias default 22" && \
+  # Install global npm packages using nvm's node
+  bash -lc "npm install -g tree-sitter-cli" && \
+  curl https://sh.rustup.rs -sSf | sh -s -- -y
 
 # Create symlink for fd
 RUN ln -s $(which fdfind) /usr/local/bin/fd

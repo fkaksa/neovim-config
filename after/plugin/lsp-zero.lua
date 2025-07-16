@@ -1,4 +1,4 @@
-local lsp_zero = require('lsp-zero')
+-- local lsp_zero = require('lsp-zero')
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
@@ -17,39 +17,16 @@ lspconfig_defaults.capabilities = vim.tbl_deep_extend(
   require('cmp_nvim_lsp').default_capabilities()
 )
 
-lsp_zero.on_attach(function(client, bufnr)
-  local keymap = vim.keymap
+local keymap = vim.keymap
 
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({
-    buffer = bufnr,
-    preserve_mappings = false
-  })
+-- extra keymaps
+keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr, desc = '[L] References' })
+keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { desc = '[T] Search LSP definitions' })
+keymap.set('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = '[T] Search LSP type definitions' })
+keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = '[T] Search LSP implementations' })
+keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
+keymap.set('n', '<leader>lR', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
 
-  -- extra keymaps
-  keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr, desc = '[L] References' })
-  keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { desc = '[T] Search LSP definitions' })
-  keymap.set('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = '[T] Search LSP type definitions' })
-  keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = '[T] Search LSP implementations' })
-  keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
-  keymap.set('n', '<leader>lR', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
-end)
-
-lsp_zero.ui({
-  float_border = 'rounded',
-  sign_text = {
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = '»',
-  },
-})
-
--- too see if the lsp is working properly you can use the following command
--- :lua require('lsp-zero.check').inspect_settings('<server>')
--- e.g.
--- :lua require('lsp-zero.check').inspect_settings('yamlls')
 local handlers = {
   -- The first entry (without a key) will be the default handler
   -- and will be called for each installed server that doesn't have
@@ -66,9 +43,8 @@ local handlers = {
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = { 'bashls', 'helm_ls', 'jsonls', 'lua_ls', 'marksman', 'yamlls', 'groovyls', 'dockerls', 'gopls', 'lemminx', 'marksman', 'basedpyright', 'terraformls', 'tflint', 'kotlin_language_server' },
+  ensure_installed = { 'basedpyright', 'bashls', 'dockerls', 'gopls', 'groovyls', 'helm_ls', 'jsonls', 'kotlin_language_server', 'lemminx', 'luals', 'marksman', 'terraformls', 'tflint', 'yamlls', }
 })
-require('mason-lspconfig').setup_handlers(handlers)
 
 --
 -- cmp settings
@@ -94,7 +70,7 @@ cmp.setup({
     { name = "luasnip" },
     { name = 'buffer',   keyword_length = 3 },
   },
-  formatting = lsp_zero.cmp_format(),
+  -- formatting = lsp_zero.cmp_format(),
   mapping = {
     ['<TAB>'] = cmp.mapping.confirm({
       -- documentation says this is important.
