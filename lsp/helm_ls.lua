@@ -1,4 +1,4 @@
-return {
+vim.lsp.config('helm_ls', {
   cmd = { 'helm_ls', 'serve' },
   filetypes = { 'helm', 'yaml.helm-values' },
   root_markers = { 'Chart.yaml' },
@@ -56,4 +56,4 @@ return {
       }
     }
   }
-}
+})

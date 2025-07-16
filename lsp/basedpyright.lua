@@ -1,4 +1,4 @@
-return {
+vim.lsp.config('basedpyright', {
   filetypes = { 'python' },
   settings = {
     basedpyright = {
@@ -9,4 +9,4 @@ return {
       }
     }
   }
-}
+})

@@ -1,7 +1,7 @@
 -- https://github.com/nvim-telescope/telescope.nvim
 return {
   'nvim-telescope/telescope.nvim',
-  branch = '0.1.x',
+  branch = 'master',
   dependencies = {
     'nvim-lua/plenary.nvim',
     'folke/trouble.nvim', -- Optional: Not sure if this is necessary here or Lazy will figure this out by himself

@@ -50,12 +50,6 @@ end,
   })
 end,
 
-['dockerls'] = function()
-  require('lspconfig').dockerls.setup({
-    filetypes = { 'dockerfile' },
-  })
-end,
-
 ['gopls'] = function()
   require('lspconfig').gopls.setup({
     filetypes = { 'go', 'gomod', 'gowrok', 'gotpml' },
