@@ -13,4 +13,5 @@ return {
   -- LuaSnip
   { 'L3MON4D3/LuaSnip' },         -- Required
   { 'saadparwaiz1/cmp_luasnip' }, -- Required
+  { "folke/lazydev.nvim" }
 }

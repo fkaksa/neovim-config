@@ -2,24 +2,13 @@
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-local telescope = require("telescope.builtin")
---
+
 -- Reserve a space in the gutter
 -- This will avoid an annoying layout shift in the screen
 vim.opt.signcolumn = 'yes'
---
--- Add cmp_nvim_lsp capabilities settings to lspconfig
--- This should be executed before you configure any language server
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lspconfig_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
 
+-- TODO this needs to be moved to attachBuffer event
 local keymap = vim.keymap
-
--- extra keymaps
 keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', { buffer = bufnr, desc = '[L] References' })
 keymap.set('n', 'gd', '<cmd>Telescope lsp_definitions<cr>', { desc = '[T] Search LSP definitions' })
 keymap.set('n', 'gt', '<cmd>Telescope lsp_type_definitions<cr>', { desc = '[T] Search LSP type definitions' })
@@ -27,28 +16,11 @@ keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = '[T] Se
 keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
 keymap.set('n', '<leader>lR', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
 
-local handlers = {
-  -- The first entry (without a key) will be the default handler
-  -- and will be called for each installed server that doesn't have
-  -- a dedicated handler.
-  function(server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup {
-      settings = {
-        -- TODO: not working as expected
-        inlay_hints = { enabled = true },
-      }
-    }
-  end,
-}
-
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = { 'basedpyright', 'bashls', 'dockerls', 'gopls', 'groovyls', 'helm_ls', 'jsonls', 'kotlin_language_server', 'lemminx', 'luals', 'marksman', 'terraformls', 'tflint', 'yamlls', }
+  ensure_installed = { 'basedpyright', 'bashls', 'dockerls', 'gopls', 'groovyls', 'helm_ls', 'jsonls', 'kotlin_language_server', 'lemminx', 'lua_ls', 'marksman', 'terraformls', 'tflint', 'yamlls', }
 })
 
---
--- cmp settings
---
 
 -- this is the function that loads the extra snippets to luasnip
 -- from rafamadriz/friendly-snippets
@@ -101,7 +73,7 @@ cmp.setup({
     end,
   },
   completion = {
-    completeopt = 'menu,menuone,noinsert',
+    completeopt = 'menu,menuone,noinsert,fuzzy,popup',
   },
 })
 
@@ -128,59 +100,70 @@ vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
   end
 })
 
--- copied by https://github.com/MariaSolOs/dotfiles/blob/bda5388e484497b8c88d9137c627c0f24ec295d7/.config/nvim/lua/lsp.lua#L193
-local methods = vim.lsp.protocol.Methods
-local md_namespace = vim.api.nvim_create_namespace 'mariasolos/lsp_float'
----LSP handler that adds extra inline highlights, keymaps, and window options.
----Code inspired from `noice`.
----@param handler fun(err: any, result: any, ctx: any, config: any): integer, integer
----@return function
-local function enhanced_float_handler(handler)
-  return function(err, result, ctx, config)
-    local buf, win = handler(
-      err,
-      result,
-      ctx,
-      vim.tbl_deep_extend('force', config or {}, {
-        border = 'rounded',
-        max_height = math.floor(vim.o.lines * 0.5),
-        max_width = math.floor(vim.o.columns * 0.4),
-      })
-    )
+-- TODO
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   group = vim.api.nvim_create_augroup('my.lsp', {}),
+--   callback = function(args)
+--     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+--     if client:supports_method('textDocument/implementation') then
+--       -- Create a keymap for vim.lsp.buf.implementation ...
+--     end
+--     -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+--     if client:supports_method('textDocument/completion') then
+--       -- Optional: trigger autocompletion on EVERY keypress. May be slow!
+--       -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
+--       -- client.server_capabilities.completionProvider.triggerCharacters = chars
+--       vim.lsp.completion.enable(false, client.id, args.buf, { autotrigger = true })
+--       vim.keymap.set('i', '<C-Space>', function()
+--         vim.lsp.completion.get()
+--       end)
+--     end
 
-    if not buf or not win then
-      return
-    end
+--     -- Auto-format ("lint") on save.
+--     -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+--     if not client:supports_method('textDocument/willSaveWaitUntil')
+--         and client:supports_method('textDocument/formatting') then
+--       vim.api.nvim_create_autocmd('BufWritePre', {
+--         group = vim.api.nvim_create_augroup('my.lsp', { clear = false }),
+--         buffer = args.buf,
+--         callback = function()
+--           vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+--         end,
+--       })
+--     end
+--   end,
+-- })
 
-    -- Conceal everything.
-    vim.wo[win].concealcursor = 'n'
+vim.diagnostic.config({
+  virtual_lines = {
+    -- Show diagnostics on the current line
+    current_line = true,
+  },
+  underline = true,
+  update_in_insert = false,
+  -- show pop up window up or down
+  -- false means down
+  severity_sort = false,
+  float = {
+    border = "rounded",
+    source = true,
+  },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "󰅚 ",
+      [vim.diagnostic.severity.WARN] = "󰀪 ",
+      [vim.diagnostic.severity.INFO] = "󰋽 ",
+      [vim.diagnostic.severity.HINT] = "󰌶 ",
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+      [vim.diagnostic.severity.WARN] = "WarningMsg",
+    },
+  },
+})
 
-    -- Extra highlights.
-    for l, line in ipairs(vim.api.nvim_buf_get_lines(buf, 0, -1, false)) do
-      for pattern, hl_group in pairs {
-        ['|%S-|'] = '@text.reference',
-        ['@%S+'] = '@parameter',
-        ['^%s*(Parameters:)'] = '@text.title',
-        ['^%s*(Return:)'] = '@text.title',
-        ['^%s*(See also:)'] = '@text.title',
-        ['{%S-}'] = '@parameter',
-      } do
-        local from = 1 ---@type integer?
-        while from do
-          local to
-          from, to = line:find(pattern, from)
-          if from then
-            vim.api.nvim_buf_set_extmark(buf, md_namespace, l - 1, from - 1, {
-              end_col = to,
-              hl_group = hl_group,
-            })
-          end
-          from = to and to + 1 or nil
-        end
-      end
-    end
-  end
-end
-
-vim.lsp.handlers[methods.textDocument_hover] = enhanced_float_handler(vim.lsp.handlers.hover)
-vim.lsp.handlers[methods.textDocument_signatureHelp] = enhanced_float_handler(vim.lsp.handlers.signature_help)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+vim.lsp.config('*', {
+  capabilities = capabilities,
+  root_markers = { '.git' },
+})
