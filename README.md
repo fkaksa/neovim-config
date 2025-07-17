@@ -47,6 +47,7 @@ This repository contains a custom Neovim configuration designed to enhance the d
 │   ├── core/               # Core settings (options, keymaps, filetypes)
 │   ├── plugins/            # Plugin configurations
 │   └── package-manager.lua # Plugin manager setup
+├── lsp/                    # Language Server Protocol configurations
 ├── after/plugin/           # Post-plugin configurations
 ├── init.lua                # Main entry point for Neovim
 ├── Dockerfile              # Docker setup for reproducible environments
