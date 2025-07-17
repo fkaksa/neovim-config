@@ -99,6 +99,7 @@ COPY init.lua .
 COPY lua/ lua
 COPY after/ after
 COPY start.sh start.sh
+COPY test/ test
 RUN chmod +x start.sh
 
 # Start in Neovim
