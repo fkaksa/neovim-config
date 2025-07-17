@@ -93,12 +93,14 @@ RUN ln -s /usr/local/bin/nvim /usr/local/bin/vim
 
 FROM nvim AS final
 
-RUN mkdir -p /root/.config/nvim
-COPY init.lua /root/.config/nvim/
-COPY lua/ /root/.config/nvim/lua
-COPY after/ /root/.config/nvim/after
+WORKDIR /root/.config/nvim
 
-WORKDIR /.config/nvim
+COPY init.lua .
+COPY lua/ lua
+COPY after/ after
+COPY start.sh start.sh
+RUN chmod +x start.sh
 
 # Start in Neovim
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["./start.sh"]
+CMD ["--headless", "+qa"]
