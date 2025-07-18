@@ -16,6 +16,6 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag nvim-test
 
-      - name: Run Neovim checkhealth
+      - name: Run Neovim tests
         run: |
           docker run --name nvim-test --rm nvim-test
