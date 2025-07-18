@@ -1,14 +1,14 @@
 --
--- This script tests if the 'basedpyright' LSP attaches to a Python file in Neovim.
+-- This script tests/ if the 'basedpyright' LSP attaches to a Python file in Neovim.
 --
 -- usage:
 -- 1. Ensure you have 'basedpyright' configured in your Neovim LSP settings.
 -- 2. Place a Python file in the specified path.
 -- -- Run the script using Neovim's command line:
---   :luafile test/lsp_test.lua
+--   :luafile tests/lsp_test.lua
 
-local server_name = "lua_ls"
-local test_file = "test/resources/test_file.lua"
+local server_name = "yamlls"
+local test_file = "tests/resources/test_file.yaml"
 
 print("Test: Check if " .. server_name .. " has been attached to a file.")
 print()
@@ -45,14 +45,3 @@ local function check_lsp()
 end
 
 timer:start(200, interval, vim.schedule_wrap(check_lsp))
-
--- local test_cases = {
---   { file = "test/resources/test_file.py",   server = "basedpyright" },
---   { file = "test/resources/test_file.json", server = "jsonls" },
---   { file = "test/resources/test_file.yaml", server = "yamlls" },
---   { file = "test/resources/test_file.tf",   server = "terraform-ls" },
--- }
-
--- for _, test in ipairs(test_cases) do
---   test_lsp(test.file, test.server)
--- end

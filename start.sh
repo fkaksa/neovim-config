@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -euo pipefail
+# set -x
 
 # Wait for npm to be ready
 while ! command -v npm &>/dev/null; do
@@ -8,8 +8,11 @@ while ! command -v npm &>/dev/null; do
   sleep 1
 done
 
+#TODO: add all logs file to this directory
+mkdir -p logs/tests
+
 # Start neovim healchcheck
-nvim --headless '+checkhealth' +qall 2>&1 | tee nvim_health_test.log
+nvim --headless '+checkhealth' +qall 2>&1 | tee logs/tests/nvim_health_test.log
 if grep -qi "ERROR" nvim_health_test.log; then
   echo "Neovim health check failed. Please check nvim_health_test.log for details."
   exit 1
@@ -18,7 +21,7 @@ else
 fi
 
 # Run Lazy plugin sync test
-nvim --headless -c 'lua require("lazy").sync({ wait = true })' +qa 2>&1 | tee nvim_lazy_test.log
+nvim --headless -c 'lua require("lazy").sync({ wait = true })' +qa 2>&1 | tee logs/tests/nvim_lazy_test.log
 if grep -qi "ERROR" nvim_lazy_test.log; then
   echo "Lazy plugin sync test failed. Please check nvim_lazy_test.log for details."
   exit 1
@@ -26,17 +29,20 @@ else
   echo "Lazy plugin sync test passed."
 fi
 
+# Run Mason install command
+nvim --headless -c "luafile tests/mason_test.lua" 2>&1 | tee logs/tests/nvim_mason_test.log
+if [ $? -ne 0 ]; then
+  echo "Mason install test failed. Please check nvim_mason_test.log for details."
+  exit 1
+else
+  echo "Mason install test passed."
+fi
+
 declare -A test_results
-declare -a test_files=(
-  "test/lsp_basedpyright_test.lua"
-  "test/lsp_jsonls_test.lua"
-  "test/lsp_lua_ls_test.lua"
-  "test/lsp_terraformls_test.lua"
-  "test/lsp_yamlls_test.lua"
-)
+declare -a test_files=($(find tests -type f -name "lsp_*_test.lua"))
 
 for test_file in "${test_files[@]}"; do
-  log_file="${test_file}_log"
+  log_file="logs/${test_file}_log"
   nvim --headless -c "luafile $test_file" 2>&1 | tee "$log_file"
 
   if grep -qi "ERROR: LSP did not attach within timeout" "$log_file"; then

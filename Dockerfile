@@ -99,9 +99,8 @@ COPY init.lua .
 COPY lua/ lua
 COPY after/ after
 COPY start.sh start.sh
-COPY test/ test
+COPY tests/ tests
 RUN chmod +x start.sh
 
 # Start in Neovim
 ENTRYPOINT ["./start.sh"]
-CMD ["--headless", "+qa"]
