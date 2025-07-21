@@ -1,9 +1,5 @@
 local treesitter = require("nvim-treesitter")
 
-treesitter.setup {
-  -- Directory to install parsers and queries to
-  install_dir = vim.fn.stdpath('data') .. '/site'
-}
 treesitter.install {
   "lua",
   "bash",
@@ -20,7 +16,15 @@ treesitter.install {
   "kotlin",
 }
 
+-- TODO: do it for all filetypes
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { '*' },
-  callback = function() vim.treesitter.start() end,
+  pattern = { 'terraform', 'terraform-vars' },
+  callback = function()
+    -- syntax highlighting, provided by Neovim
+    vim.treesitter.start()
+    -- folds, provided by Neovim
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    -- indentation, provided by nvim-treesitter
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
 })
