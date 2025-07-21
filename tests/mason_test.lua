@@ -1,4 +1,3 @@
-local mason = require("mason")
 local registry = require("mason-registry")
 
 local interval = 1000    -- ms between checks
