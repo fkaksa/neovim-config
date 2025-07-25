@@ -1,3 +1,4 @@
+require('lsp')
 -- load keymaps and settings
 require('core')
 -- Install package manager and plugins
