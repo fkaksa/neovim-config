@@ -39,6 +39,10 @@ This repository contains a custom Neovim configuration designed to enhance the d
 | `<leader>yd`         | Normal | Copy absolute directory path         |
 | `<leader>yD`         | Normal | Copy relative directory path         |
 | `<leader>qa`         | Normal | Add current line to quickfix list    |
+| `<leader>do`         | Normal | Open Diffview in current directory   |
+| `<leader>dc`         | Normal | Close Diffview                       |
+| `<leader>dh`         | Normal | Toggle Diffview files                |
+| `<leader>dt`         | Normal | Toggle Diffview files                |
 
 ## Directory Structure
 

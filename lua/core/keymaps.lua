@@ -42,3 +42,12 @@ keymap.set("n", "<leader>yD", ":let @*=substitute(expand('%:p:h'), getcwd() .. '
 -- add current line into quickfix list
 keymap.set("n", "<leader>qa", ':caddexpr expand("%") .. ":" .. line(".") ..  ":" .. getline(".")<CR>',
   { desc = "[QUICKFIX] Add current line to quickfix list" })
+
+-- open diffview
+keymap.set("n", "<leader>do", ":DiffviewOpen<CR>", { desc = "[GIT] Open Diffview in current directory" })
+-- close diffview
+keymap.set("n", "<leader>dc", ":DiffviewClose<CR>", { desc = "[GIT] Close Diffview" })
+-- open diff file history
+keymap.set("n", "<leader>dh", ":DiffviewFileHistory<CR>", { desc = "[GIT] Toggle Diffview files" })
+-- toggle diffview
+keymap.set("n", "<leader>dt", ":DiffviewToggleFiles<CR>", { desc = "[GIT] Toggle Diffview files" })

@@ -17,6 +17,7 @@ vim.lsp.config('terraformls', {
     experimentalFeatures = {
       prefillRequiredFields = true,
       validateOnSave = true,
-    }
+    },
+    ignoreSingleFileWarning = true
   }
 })
