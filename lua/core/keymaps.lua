@@ -49,5 +49,10 @@ keymap.set("n", "<leader>do", ":DiffviewOpen<CR>", { desc = "[GIT] Open Diffview
 keymap.set("n", "<leader>dc", ":DiffviewClose<CR>", { desc = "[GIT] Close Diffview" })
 -- open diff file history
 keymap.set("n", "<leader>dh", ":DiffviewFileHistory<CR>", { desc = "[GIT] Toggle Diffview files" })
+-- open diff file history for current file
+keymap.set("n", "<leader>df", ":DiffviewFileHistory %<CR>", { desc = "[GIT] Toggle Diffview files for current file" })
+-- open diff file history for visualized line
+keymap.set("v", "<leader>df", ":'<,'>DiffviewFileHistory<CR>",
+  { desc = "[GIT] Toggle Diffview files for visualized line" })
 -- toggle diffview
 keymap.set("n", "<leader>dt", ":DiffviewToggleFiles<CR>", { desc = "[GIT] Toggle Diffview files" })

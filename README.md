@@ -41,9 +41,10 @@ This repository contains a custom Neovim configuration designed to enhance the d
 | `<leader>qa`         | Normal | Add current line to quickfix list    |
 | `<leader>do`         | Normal | Open Diffview in current directory   |
 | `<leader>dc`         | Normal | Close Diffview                       |
-| `<leader>dh`         | Normal | Toggle Diffview files                |
+| `<leader>dh`         | Normal | Open Diffview file history           |
+| `<leader>df`         | Normal | Open Diffview file history for file  |
+| `<leader>df`         | Visual | Open Diffview file history for lines |
 | `<leader>dt`         | Normal | Toggle Diffview files                |
-
 ## Directory Structure
 
 ```plaintext
