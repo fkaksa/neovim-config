@@ -16,7 +16,7 @@ keymap.set('n', 'gi', '<cmd>Telescope lsp_implementations<cr>', { desc = '[T] Se
 keymap.set({ 'n', 'x' }, '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = '[L] Code Action' })
 keymap.set('n', '<leader>lR', vim.lsp.buf.rename, { buffer = bufnr, desc = '[L] Rename' })
 
-require('mason').setup({})
+require('mason').setup()
 require('mason-lspconfig').setup({
   ensure_installed = { 'basedpyright', 'bashls', 'dockerls', 'gopls', 'groovyls', 'helm_ls', 'jsonls', 'kotlin_language_server', 'lemminx', 'lua_ls', 'marksman', 'terraformls', 'tflint', 'yamlls', }
 })
