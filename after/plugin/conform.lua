@@ -14,6 +14,7 @@ conform.setup({
     go = { "golines", "goimports-reviser", stop_after_first = true },
     python = { "autopep8" },
     terraform = { "terraform_fmt" },
+    markdown = { "prettierd", "prettier", stop_after_first = true },
   },
   format_on_save = {
     -- These options will be passed to conform.format()
