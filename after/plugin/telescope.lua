@@ -1,7 +1,9 @@
 local builtin = require('telescope.builtin')
 local telescope = require('telescope')
 local actions = require('telescope.actions')
+local action_state = require("telescope.actions.state")
 local keymap = vim.keymap
+
 
 -- function copied from https://github.com/nvim-telescope/telescope.nvim/issues/1048#issuecomment-1679797700
 local select_one_or_multi = function(prompt_bufnr)
@@ -11,11 +13,12 @@ local select_one_or_multi = function(prompt_bufnr)
     require('telescope.actions').close(prompt_bufnr)
     for _, j in pairs(multi) do
       if j.path ~= nil then
-        if j.lnum ~= nil then
-          vim.cmd(string.format("%s %s:%s", "edit", j.path, j.lnum))
-        else
-          vim.cmd(string.format('%s %s', 'edit', j.path))
-        end
+        vim.cmd(string.format('%s %s', 'edit', j.path))
+        -- if j.lnum ~= nil then
+        --   vim.cmd(string.format("%s %s:%s", "edit", j.path, j.lnum))
+        -- else
+        --   vim.cmd(string.format('%s %s', 'edit', j.path))
+        -- end
       end
     end
   else
@@ -25,8 +28,28 @@ end
 
 local open_with_trouble = require("trouble.sources.telescope").open
 
+-- custom action to open multiple files in vertical splits
+local function multiopen_vertical(prompt_bufnr)
+  local picker = action_state.get_current_picker(prompt_bufnr)
+  local selections = picker:get_multi_selection()
+
+  actions.close(prompt_bufnr)
+
+  if #selections > 0 then
+    -- open the first file normally
+    vim.cmd("edit " .. selections[1].value)
+    -- the rest in vertical splits
+    for i = 2, #selections do
+      vim.cmd("vsplit " .. selections[i].value)
+    end
+  else
+    -- fallback: open current entry in vertical split
+    actions.select_vertical(prompt_bufnr)
+  end
+end
+
 -- Use this to add more results without clearing the trouble list
-local add_to_trouble = require("trouble.sources.telescope").add
+-- local add_to_trouble = require("trouble.sources.telescope").add
 
 telescope.setup {
   defaults = {
@@ -35,11 +58,13 @@ telescope.setup {
         ['<CR>'] = select_one_or_multi,
         ["<c-t>"] = open_with_trouble,
         -- ["<c-z>"] = add_to_trouble
+        ['<c-v>'] = multiopen_vertical,
       },
       n = {
         ['<CR>'] = select_one_or_multi,
         ["<c-t>"] = open_with_trouble,
         -- ["<c-z>"] = add_to_trouble
+        ['<c-v>'] = multiopen_vertical,
       },
     },
   },

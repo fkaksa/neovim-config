@@ -39,7 +39,12 @@ This repository contains a custom Neovim configuration designed to enhance the d
 | `<leader>yd`         | Normal | Copy absolute directory path         |
 | `<leader>yD`         | Normal | Copy relative directory path         |
 | `<leader>qa`         | Normal | Add current line to quickfix list    |
-
+| `<leader>do`         | Normal | Open Diffview in current directory   |
+| `<leader>dc`         | Normal | Close Diffview                       |
+| `<leader>dh`         | Normal | Open Diffview file history           |
+| `<leader>df`         | Normal | Open Diffview file history for file  |
+| `<leader>df`         | Visual | Open Diffview file history for lines |
+| `<leader>dt`         | Normal | Toggle Diffview files                |
 ## Directory Structure
 
 ```plaintext
@@ -47,6 +52,7 @@ This repository contains a custom Neovim configuration designed to enhance the d
 │   ├── core/               # Core settings (options, keymaps, filetypes)
 │   ├── plugins/            # Plugin configurations
 │   └── package-manager.lua # Plugin manager setup
+├── lsp/                    # Language Server Protocol configurations
 ├── after/plugin/           # Post-plugin configurations
 ├── init.lua                # Main entry point for Neovim
 ├── Dockerfile              # Docker setup for reproducible environments
