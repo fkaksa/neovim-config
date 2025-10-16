@@ -41,21 +41,25 @@ navic.setup {
 }
 
 -- copy breadcrumb to clipboard
-keymap.set('n', '<leader>yb',
-  function()
+keymap.set('n', '<leader>yb', function()
+  local ok, err = pcall(function()
     local bufnr = vim.api.nvim_get_current_buf()
     local breadcrumb = ''
     if navic.is_available(bufnr) then
       local navic_data = navic.get_data(bufnr)
       for _, comp in ipairs(navic_data) do
-        -- if comp.name contains '.' then put '' around it
+        print(comp.name)
         if string.find(comp.name, '%.') then
-          comp.name = '\'' .. comp.name .. '\''
+          comp.name = "'" .. comp.name .. "'"
         end
         breadcrumb = breadcrumb .. '.' .. comp.name
       end
     end
     vim.fn.setreg('*', breadcrumb)
-  end,
-  { noremap = true, silent = true, desc = 'Copy breadcrumb to clipboard' }
-)
+    vim.notify('Breadcrumb copied: ' .. breadcrumb)
+  end)
+
+  if not ok then
+    vim.notify('Error: ' .. tostring(err), vim.log.levels.ERROR)
+  end
+end, { noremap = true, silent = true, desc = 'Copy breadcrumb to clipboard' })

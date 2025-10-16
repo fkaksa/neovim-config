@@ -8,6 +8,7 @@ vim.lsp.config('helm_ls', {
         dynamicRegistration = true,
       },
     },
+    documentSymbolProvider = true,
   },
   settings = {
     ['helm-ls'] = {
