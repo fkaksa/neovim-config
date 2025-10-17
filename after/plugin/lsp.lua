@@ -1,4 +1,3 @@
--- local lsp_zero = require('lsp-zero')
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
@@ -170,5 +169,5 @@ vim.lsp.config('*', {
   --   if client.server_capabilities.documentSymbolProvider then
   --     navic.attach(client, bufnr)
   --   end
-  -- end
+  --end
 })
