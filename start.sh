@@ -9,11 +9,12 @@ while ! command -v npm &>/dev/null; do
 done
 
 #TODO: add all logs file to this directory
-mkdir -p logs/tests
+LOG_DIR="logs/tests"
+mkdir -p "$LOG_DIR"
 
 # Start neovim healchcheck
-nvim --headless '+checkhealth' +qall 2>&1 | tee logs/tests/nvim_health_test.log
-if grep -qi "ERROR" nvim_health_test.log; then
+nvim --headless '+checkhealth' +qall 2>&1 | tee ${LOG_DIR}/nvim_health_test.log
+if grep -qi "ERROR" ${LOG_DIR}/nvim_health_test.log; then
   echo "Neovim health check failed. Please check nvim_health_test.log for details."
   exit 1
 else
@@ -21,8 +22,8 @@ else
 fi
 
 # Run Lazy plugin sync test
-nvim --headless -c 'lua require("lazy").sync({ wait = true })' +qa 2>&1 | tee logs/tests/nvim_lazy_test.log
-if grep -qi "ERROR" nvim_lazy_test.log; then
+nvim --headless -c 'lua require("lazy").sync({ wait = true })' +qa 2>&1 | tee ${LOG_DIR}/nvim_lazy_test.log
+if grep -qi "ERROR" ${LOG_DIR}/nvim_lazy_test.log; then
   echo "Lazy plugin sync test failed. Please check nvim_lazy_test.log for details."
   exit 1
 else
