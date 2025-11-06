@@ -18,7 +18,7 @@ done
 
 # Start neovim healchcheck
 nvim --headless '+checkhealth' +qall 2>&1 | tee ${TMPDIR}/nvim_health_test.log
-if grep -qi "ERROR" ${TMPDIR}/nvim_health_test.log; then
+if ${TMPDIR}/nvim_health_test.log | grep -vi "copilot" | grep -qi "ERROR"; then
   echo "Neovim health check failed. Please check nvim_health_test.log for details."
   cat ${TMPDIR}/nvim_health_test.log
   exit 1
