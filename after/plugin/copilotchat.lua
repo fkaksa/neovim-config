@@ -2,7 +2,7 @@ local chat = require('CopilotChat')
 local keymap = vim.keymap
 
 chat.setup({
-  -- model = 'gpt-4o',
+  model = 'gpt-5-mini',
   auto_insert_mode = true,
   prompts = {
     Tests = {
@@ -21,10 +21,7 @@ chat.setup({
 --- Keymaps
 keymap.set({ 'n', 'v' }, '<leader>cco', ':CopilotChatOpen<cr>', { desc = "[CopilotChat] Open Chat" })
 
-keymap.set({ 'n', 'v' }, "<leader>ccp", function()
-    local actions = require("CopilotChat.actions")
-    require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
-  end,
+keymap.set({ 'n', 'v' }, "<leader>ccp", ':CopilotChatPrompts<cr>',
   { desc = "[CopilotChat] Pick prompt" })
 
 vim.api.nvim_create_autocmd('BufEnter', {
