@@ -81,7 +81,7 @@ ENV LC_ALL=en_US.UTF-8
 
 FROM base AS nvim
 
-ENV NVIM_VERSION=0.11.3
+ENV NVIM_VERSION=0.11.5
 RUN curl -LO https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim-linux-x86_64.tar.gz && \
   tar xzf nvim-linux-x86_64.tar.gz && \
   mv nvim-linux-x86_64 /opt/nvim && \
