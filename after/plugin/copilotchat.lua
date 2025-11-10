@@ -2,7 +2,7 @@ local chat = require('CopilotChat')
 local keymap = vim.keymap
 
 chat.setup({
-  model = 'gpt-5-mini',
+  model = 'claude-haiku-4.5',
   auto_insert_mode = true,
   prompts = {
     Tests = {
