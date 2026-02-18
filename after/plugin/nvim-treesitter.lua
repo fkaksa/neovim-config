@@ -1,5 +1,10 @@
 local treesitter = require("nvim-treesitter")
 
+treesitter.setup {
+  -- Directory to install parsers and queries to (prepended to `runtimepath` to have priority)
+  install_dir = vim.fn.stdpath('data') .. '/site'
+}
+
 treesitter.install {
   "lua",
   "bash",
@@ -12,13 +17,14 @@ treesitter.install {
   "yaml",
   "json",
   "markdown_inline",
+  'markdown',
   "terraform",
   "kotlin",
 }
 
 -- TODO: do it for all filetypes
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'terraform', 'terraform-vars' },
+  pattern = { 'terraform', 'terraform-vars', 'markdown_inline', 'markdown' },
   callback = function()
     -- syntax highlighting, provided by Neovim
     vim.treesitter.start()
