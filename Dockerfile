@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 AS base
+FROM ubuntu:24.04 AS base
 
 # Set noninteractive mode for apt
 ENV DEBIAN_FRONTEND=noninteractive
@@ -66,8 +66,8 @@ RUN echo '. "${BASH_ENV}"' >> ~/.bashrc
 
 # Download and install nvm, npm and Node.js (v22)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | PROFILE="${BASH_ENV}" bash && \
-  echo 'nvm install 22 && nvm use 22 && nvm alias default 22' >> /root/.bashrc && \
-  bash -lc "nvm install 22 && nvm use 22 && nvm alias default 22" && \
+  echo 'nvm install 25 && nvm use 25 && nvm alias default 25' >> /root/.bashrc && \
+  bash -lc "nvm install 25 && nvm use 25 && nvm alias default 25" && \
   # Install global npm packages using nvm's node
   bash -lc "npm install -g tree-sitter-cli" && \
   curl https://sh.rustup.rs -sSf | sh -s -- -y
