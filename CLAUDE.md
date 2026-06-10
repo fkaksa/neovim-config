@@ -7,7 +7,7 @@ Personal Neovim configuration in Lua, managed with [lazy.nvim](https://github.co
 
 ## Tech Stack
 
-Lua, Neovim (0.11.x), lazy.nvim (plugin manager), Mason (LSP/tool installer), Docker (test environment). Theme: catppuccin-mocha.
+Lua, Neovim (0.12.x), lazy.nvim (plugin manager), Mason (LSP/tool installer), Docker (test environment). Theme: catppuccin-mocha.
 
 ---
 
@@ -15,12 +15,13 @@ Lua, Neovim (0.11.x), lazy.nvim (plugin manager), Mason (LSP/tool installer), Do
 
 | Story | Status | Notes |
 |-------|--------|-------|
-| Neovim 0.11.5 upgrade | In Progress | Branch `feature/nvim-0.11.5`; treesitter & navbuddy fixed (8c42717) |
-| Disable Copilot plugins | In Progress | Copilot configs renamed to `*.disable` (uncommitted) |
+| Neovim 0.11.5 upgrade | Done | Merged via PR #3 (45bf2b1) |
+| Disable Copilot plugins | Done | Copilot removed from setup (474e453) |
+| Neovim 0.12.2 upgrade | In Progress | Branch `feature/nvim-0.12`; Docker harness green, host upgraded (brew 0.12.2, plugins synced); commits pending |
 
 **Legend:** Open | In Progress | Done
 
-**Next Step:** Decide whether to commit the Copilot plugin disabling, then finish Neovim 0.11.5 validation via Docker test harness.
+**Next Step:** Commit the 0.12 upgrade changes on `feature/nvim-0.12`, do an interactive smoke test (`:checkhealth`, LSP, `gcc` commenting), then open a PR to master.
 
 ### Future
 
@@ -36,6 +37,9 @@ Lua, Neovim (0.11.x), lazy.nvim (plugin manager), Mason (LSP/tool installer), Do
 | Date | Decision | Why |
 |------|----------|-----|
 | 2026-06-10 | CLAUDE.md tracked Solo (gitignored) | Personal config repo, not shared |
+| 2026-06-10 | Harness health check reads the `health://` buffer, not stdout | Since nvim 0.12 headless `:checkhealth` prints only progress to stdout; grepping stdout passes vacuously |
+| 2026-06-10 | Ignore "is not in runtimepath" in health check | False positive: archived nvim-treesitter main has a trailing-slash comparison bug; parsers/queries verified working |
+| 2026-06-10 | After treesitter parser updates on macOS, re-sign parsers (`codesign -f -s - ~/.local/share/nvim/site/parser/*.so`) | In-place overwritten .so files get SIGKILLed by the kernel (stale code-signature cache on Apple Silicon) |
 
 ---
 
