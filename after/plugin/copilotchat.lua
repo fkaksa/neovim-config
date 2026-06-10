@@ -2,7 +2,7 @@ local chat = require('CopilotChat')
 local keymap = vim.keymap
 
 chat.setup({
-  model = 'gpt-5-mini',
+  model = 'claude-haiku-4.5',
   auto_insert_mode = true,
   prompts = {
     Tests = {
@@ -12,7 +12,7 @@ chat.setup({
     },
     Commit = {
       prompt =
-      '/COPILOT_GENERATE Write commit message for the change with commitizen convention. Keep the title under 50 characters and wrap message at 72 characters. Format as a gitcommit code block. Write commit message using commitizen convention. Commit message must match pattern: "^([A-Z]+-[0-9]{1,4}): ([A-Za-z]+) .{3,}(?:\n\n?.*)*$", where part until ":" sign is called prefix and after the sign postfix. Extract prefix from the branch name if it is possible. Branch name can be in form: "^.*/<prefix>$". If it is not possible to extract the prefix, put "NOTICKET-000" as a prefix.',
+      '/COPILOT_GENERATE Generate a commit message following the Commitizen convention. Adhere to the following requirements: (1) Keep the title under 50 characters, (2) Wrap the body at 72 characters, (3) Format as a gitcommit code block. The message must match the pattern: "^([A-Z]+-[0-9]{1,4}): ([A-Za-z]+) .{3,}(?:\n\n?.*)*$", where the prefix (before the colon) follows the pattern [A-Z]+-[0-9]{1,4}. Extract the prefix from the git branch name (git branch command) using the pattern "^.*/([A-Z]+-[0-9]{1,4}).*$". If extraction is not possible, use "NOTICKET-000" as the default prefix.',
       selection = require('CopilotChat.select').buffer
     }
   },

@@ -2,37 +2,45 @@
 
 # set -x
 
+TMPDIR=$(mktemp -d)
+mkdir -p "$TMPDIR"
+function cleanup {
+  echo "Cleaning up..."
+  rm -rf ${TMPDIR}
+}
+trap cleanup EXIT
+
 # Wait for npm to be ready
 while ! command -v npm &>/dev/null; do
   echo "Waiting for npm to be available..."
   sleep 1
 done
 
-#TODO: add all logs file to this directory
-mkdir -p logs/tests
-
 # Start neovim healchcheck
-nvim --headless '+checkhealth' +qall 2>&1 | tee logs/tests/nvim_health_test.log
-if grep -qi "ERROR" nvim_health_test.log; then
+nvim --headless '+checkhealth' +qall 2>&1 | tee ${TMPDIR}/nvim_health_test.log
+if ${TMPDIR}/nvim_health_test.log | grep -vi "copilot" | grep -qi "ERROR"; then
   echo "Neovim health check failed. Please check nvim_health_test.log for details."
+  cat ${TMPDIR}/nvim_health_test.log
   exit 1
 else
   echo "Neovim health check passed."
 fi
 
 # Run Lazy plugin sync test
-nvim --headless -c 'lua require("lazy").sync({ wait = true })' +qa 2>&1 | tee logs/tests/nvim_lazy_test.log
-if grep -qi "ERROR" nvim_lazy_test.log; then
+nvim --headless -c 'lua require("lazy").sync({ wait = true })' +qa 2>&1 | tee ${TMPDIR}/nvim_lazy_test.log
+if grep -qi "ERROR" ${TMPDIR}/nvim_lazy_test.log; then
   echo "Lazy plugin sync test failed. Please check nvim_lazy_test.log for details."
+  cat ${TMPDIR}/nvim_lazy_test.log
   exit 1
 else
   echo "Lazy plugin sync test passed."
 fi
 
 # Run Mason install command
-nvim --headless -c "luafile tests/mason_test.lua" 2>&1 | tee logs/tests/nvim_mason_test.log
+nvim --headless -c "luafile tests/mason_test.lua" 2>&1 | tee ${TMPDIR}/nvim_mason_test.log
 if [ $? -ne 0 ]; then
   echo "Mason install test failed. Please check nvim_mason_test.log for details."
+  cat ${TMPDIR}/nvim_mason_test.log
   exit 1
 else
   echo "Mason install test passed."

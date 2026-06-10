@@ -81,3 +81,6 @@ vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 -- elseif vim.fn.has('nvim-0.11') == 1 then
 --   vim.o.diffopt = 'internal,filler,closeoff,linematch:40'
 -- end
+
+-- Ignore whitespace changes when diffing
+vim.opt.diffopt:append("iwhite")
