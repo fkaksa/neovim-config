@@ -16,9 +16,22 @@ while ! command -v npm &>/dev/null; do
   sleep 1
 done
 
-# Start neovim healchcheck
-nvim --headless '+checkhealth' +qall 2>&1 | tee ${TMPDIR}/nvim_health_test.log
-if ${TMPDIR}/nvim_health_test.log | grep -vi "copilot" | grep -qi "ERROR"; then
+# Start neovim healthcheck
+# Since nvim 0.12 the headless checkhealth report is only written to the health://
+# buffer (stdout gets progress messages only), so dump the buffer to a file.
+nvim --headless '+checkhealth' \
+  "+lua vim.fn.writefile(vim.fn.getbufline(vim.fn.bufnr('health://'), 1, '\$'), '${TMPDIR}/nvim_health_test.log')" \
+  '+qa!' 2>&1
+if [ ! -s "${TMPDIR}/nvim_health_test.log" ]; then
+  echo "Neovim health check failed: no health report produced (nvim crashed during checkhealth?)."
+  exit 1
+fi
+# Error lines in the health report look like "- ❌ ERROR ...". A plain case-insensitive
+# "error" grep would also hit config dumps like 'log_level = "error"' and the per-section
+# "1 ❌" summary counts, so anchor on the error line marker.
+# The archived nvim-treesitter main branch always reports "is not in runtimepath"
+# due to a trailing-slash comparison bug in its health check - ignore that line.
+if grep -v "is not in runtimepath" "${TMPDIR}/nvim_health_test.log" | grep -qE "^- (❌ )?ERROR"; then
   echo "Neovim health check failed. Please check nvim_health_test.log for details."
   cat ${TMPDIR}/nvim_health_test.log
   exit 1
@@ -51,6 +64,7 @@ declare -a test_files=($(find tests -type f -name "lsp_*_test.lua"))
 
 for test_file in "${test_files[@]}"; do
   log_file="logs/${test_file}_log"
+  mkdir -p "$(dirname "$log_file")"
   nvim --headless -c "luafile $test_file" 2>&1 | tee "$log_file"
 
   if grep -qi "ERROR: LSP did not attach within timeout" "$log_file"; then
