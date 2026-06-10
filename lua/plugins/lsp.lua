@@ -8,10 +8,15 @@ return {
   }, -- Optional
 
   -- Autocompletion
-  { 'hrsh7th/nvim-cmp' },         -- Required
-  { 'hrsh7th/cmp-nvim-lsp' },     -- Required
-  -- LuaSnip
-  { 'L3MON4D3/LuaSnip' },         -- Required
-  { 'saadparwaiz1/cmp_luasnip' }, -- Required
+  {
+    'saghen/blink.cmp',
+    dependencies = {
+      'saghen/blink.lib',
+      'rafamadriz/friendly-snippets',
+    },
+    build = function()
+      require('blink.cmp').build():pwait()
+    end,
+  },
   { "folke/lazydev.nvim" }
 }
