@@ -40,6 +40,7 @@ Lua, Neovim (0.12.x), lazy.nvim (plugin manager), Mason (LSP/tool installer), Do
 | 2026-06-10 | Harness health check reads the `health://` buffer, not stdout | Since nvim 0.12 headless `:checkhealth` prints only progress to stdout; grepping stdout passes vacuously |
 | 2026-06-10 | Ignore "is not in runtimepath" in health check | False positive: archived nvim-treesitter main has a trailing-slash comparison bug; parsers/queries verified working |
 | 2026-06-10 | After treesitter parser updates on macOS, re-sign parsers (`codesign -f -s - ~/.local/share/nvim/site/parser/*.so`) | In-place overwritten .so files get SIGKILLed by the kernel (stale code-signature cache on Apple Silicon) |
+| 2026-06-25 | When blink.cmp re-shows the "V2 new build/download system" warning after a plugin update, rebuild the native lib: `nvim --headless -c "lua require('blink.cmp').build():wait()" -c qa` (or `:Lazy build blink.cmp`) | Not a missing-config issue — `build=` is already set in `lua/plugins/lsp.lua`. The warning fires on a stale binary: blink.cmp's `target/release/version` marker no longer matches the checked-out commit, so it falls back to the Lua matcher and warns on every startup |
 
 ---
 
