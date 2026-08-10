@@ -1,7 +1,3 @@
-local cmp = require('cmp')
-local luasnip = require('luasnip')
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-
 -- Reserve a space in the gutter
 -- This will avoid an annoying layout shift in the screen
 vim.opt.signcolumn = 'yes'
@@ -21,58 +17,26 @@ require('mason-lspconfig').setup({
 })
 
 
--- this is the function that loads the extra snippets to luasnip
--- from rafamadriz/friendly-snippets
-require('luasnip.loaders.from_vscode').lazy_load()
-
-cmp.event:on(
-  'confirm_done',
-  cmp_autopairs.on_confirm_done()
-)
-
-cmp.setup({
+require('blink.cmp').setup({
+  -- 'super-tab' keeps the old nvim-cmp behavior: Tab accepts the selected item.
+  -- All presets also map <C-Space> (open menu/docs), <C-e> (hide), <C-n>/<C-p> (select).
+  keymap = { preset = 'super-tab' },
   sources = {
-    -- Copilot Source
-    -- { name = "copilot",  group_index = 2 },
-    -- Other Sources
-    { name = "nvim_lsp", group_index = 2 },
-    { name = "path",     group_index = 2 },
-    { name = 'nvim_lua', group_index = 2 },
-    { name = "luasnip" },
-    { name = 'buffer',   keyword_length = 3 },
-  },
-  -- formatting = lsp_zero.cmp_format(),
-  mapping = {
-    ['<TAB>'] = cmp.mapping.confirm({
-      -- documentation says this is important.
-      -- I don't know why.
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false
-    }),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<C-p>'] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_prev_item({ behavior = 'insert' })
-      else
-        cmp.complete()
-      end
-    end),
-    ['<C-n>'] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.select_next_item({ behavior = 'insert' })
-      else
-        cmp.complete()
-      end
-    end),
-  },
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  completion = {
-    completeopt = 'menu,menuone,noinsert,fuzzy,popup',
+    default = { 'lsp', 'path', 'snippets', 'buffer' },
+    per_filetype = {
+      -- lazydev provides the nvim/lua API completions (replaces the old nvim_lua source)
+      lua = { inherit_defaults = true, 'lazydev' },
+    },
+    providers = {
+      lazydev = {
+        name = 'LazyDev',
+        module = 'lazydev.integrations.blink',
+        score_offset = 100,
+      },
+      buffer = {
+        min_keyword_length = 3,
+      },
+    },
   },
 })
 
@@ -161,7 +125,7 @@ vim.diagnostic.config({
   },
 })
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = require('blink.cmp').get_lsp_capabilities()
 vim.lsp.config('*', {
   capabilities = capabilities,
   root_markers = { '.git' },

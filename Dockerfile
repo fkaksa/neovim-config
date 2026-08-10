@@ -32,7 +32,8 @@ RUN apt-get update && apt-get install -y \
   python-is-python3 \
   locales && \
   locale-gen en_US.UTF-8 && \
-  update-locale LANG=en_US.UTF-8curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
+  update-locale LANG=en_US.UTF-8 && \
+  curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
   apt-get install -y nodejs && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
@@ -78,10 +79,12 @@ RUN ln -s $(which fdfind) /usr/local/bin/fd
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
+# checkhealth (vim.health) runs `infocmp -L`, which needs TERM even when headless
+ENV TERM=xterm-256color
 
 FROM base AS nvim
 
-ENV NVIM_VERSION=0.11.5
+ENV NVIM_VERSION=0.12.2
 RUN curl -LO https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim-linux-x86_64.tar.gz && \
   tar xzf nvim-linux-x86_64.tar.gz && \
   mv nvim-linux-x86_64 /opt/nvim && \
