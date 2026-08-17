@@ -103,12 +103,11 @@ telescope.setup {
     find_files = {
       hidden = false,
       no_ignore = true,
-      -- find_command = {
-      --   'rg',
-      --   '--files',
-      --   '--color',
-      --   'never',
-      -- },
+      -- Explicit paths make rg traverse these hidden dirs even without
+      -- --hidden (allow-list); missing dirs only produce an ignored stderr
+      -- warning. Telescope still appends --hidden/--no-ignore from the
+      -- opts above.
+      find_command = { 'rg', '--files', '.', '.github', '.claude' },
     },
   },
   --   live_grep = {
